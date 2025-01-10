@@ -6,6 +6,7 @@
   (t :background "dim gray" :foreground "white"))
 
 (defun call-with-process-region (start end loading-message process then)
+  (buffer-mark-cancel (point-buffer start))
   (let ((overlay (make-overlay start end 'process-region-attribute))
         (spinner
           (lem/loading-spinner:start-loading-spinner 
