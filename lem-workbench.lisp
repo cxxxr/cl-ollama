@@ -47,6 +47,8 @@
   (translate-region start end "english"))
 
 ;;; coding
+(defparameter *default-coding-model* "deepkseek-coder-v2")
+
 (defun make-prompt (code)
   (format nil "Could you please review the following code snippet and provide comments? Specifically, I'm interested in understanding:
 
@@ -66,7 +68,7 @@ Here's the code:
    "Review..."
    (lambda (string)
      (ollama/utils:slurp
-      (ollama:generate (make-prompt string) :model "phi4")))
+      (ollama:generate (make-prompt string) :model *default-coding-model*)))
    (lambda (start end result)
      (declare (ignore start end))
      (let ((buffer (make-buffer "*ollama*")))
