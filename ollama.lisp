@@ -13,11 +13,14 @@
   (quri:make-uri :defaults "http://localhost:11434"
                  :path path))
 
-(defun generate (prompt &key (model (alexandria:required-argument :model)))
+(defun generate (prompt &key (model (alexandria:required-argument :model))
+                             options)
   (let ((response (babel:octets-to-string
                    (dex:post (url "/api/generate")
                              :headers '(("content-type" . "application/json"))
-                             :content (to-json (hash "model" model "prompt" prompt))))))
+                             :content (to-json (hash "model" model
+                                                     "prompt" prompt
+                                                     "options" (apply #'hash options)))))))
     (with-input-from-string (input-stream response)
       (loop :for object := (handler-case (yason:parse input-stream)
                              (end-of-file () nil))
